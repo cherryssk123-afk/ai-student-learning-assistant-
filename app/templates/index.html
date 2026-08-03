@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}Learn Smarter. Not Harder.{% endblock %}
+
+{% block full_width_content %}
+<!-- Hero Section -->
+<section class="py-5 position-relative overflow-hidden">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7 text-center text-lg-start">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill glass-card border border-success">
+                    <span class="badge bg-success rounded-circle p-1"><i class="bi bi-award-fill"></i></span>
+                    <span class="small text-emerald fw-semibold">Coventry University MSc Dissertation Project</span>
+                </div>
+                <h1 class="display-3 fw-bold mb-3 lh-sm">
+                    AI-Powered Student <br>
+                    <span class="brand-text">Learning Assistant</span>
+                </h1>
+                <p class="fs-4 text-warning fw-semibold mb-3">Learn Smarter. Not Harder.</p>
+                <p class="fs-5 text-muted mb-4 lead" style="max-width: 650px;">
+                    Stop wasting hours searching across Google, YouTube, LMS portals, and scattered PDFs. Access one intelligent SaaS platform that guides higher education students step-by-step from beginner to advanced mastery.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-emerald btn-lg px-4 py-3 shadow-lg">
+                        <i class="bi bi-rocket-takeoff-fill me-2"></i> Get Started Free
+                    </a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-glass btn-lg px-4 py-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Student Sign In
+                    </a>
+                </div>
+                <div class="mt-4 pt-2 d-flex align-items-center gap-4 justify-content-center justify-content-lg-start text-white-50" style="font-size: 0.85rem;">
+                    <span><i class="bi bi-check-circle-fill text-success me-1"></i> Structured Roadmaps</span>
+                    <span><i class="bi bi-check-circle-fill text-success me-1"></i> Academic Integrity Protected</span>
+                    <span><i class="bi bi-check-circle-fill text-success me-1"></i> SUS Certified</span>
+                </div>
+            </div>
+            
+            <div class="col-lg-5">
+                <div class="glass-panel p-4 position-relative border border-success shadow-lg">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="rounded-circle bg-success p-2 d-inline-flex"><i class="bi bi-signpost-split-fill text-white"></i></span>
+                            <div>
+                                <h6 class="mb-0 text-white">Machine Learning Pathway</h6>
+                                <small class="text-white-50">6 Weeks • Postgraduate Level</small>
+                            </div>
+                        </div>
+                        <span class="badge badge-gold">Active</span>
+                    </div>
+                    
+                    <!-- Interactive Sample Progress Preview -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small text-white-50 mb-1">
+                            <span>Pathway Completion</span>
+                            <span class="text-success fw-bold">66.7%</span>
+                        </div>
+                        <div class="progress progress-custom">
+                            <div class="progress-bar progress-bar-emerald" style="width: 66.7%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="vstack gap-2">
+                        <div class="p-2.5 rounded glass-card border border-success d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                <span class="small text-white">Week 1: Python & Statistics Foundations</span>
+                            </div>
+                            <span class="badge bg-success" style="font-size: 0.65rem;">Done</span>
+                        </div>
+                        <div class="p-2.5 rounded glass-card border border-success d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                <span class="small text-white">Week 2: Supervised Learning & Scikit-Learn</span>
+                            </div>
+                            <span class="badge bg-success" style="font-size: 0.65rem;">Done</span>
+                        </div>
+                        <div class="p-2.5 rounded glass-card border border-warning d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-play-circle-fill text-warning fs-5"></i>
+                                <span class="small text-white">Week 3: Deep Neural Networks & PyTorch</span>
+                            </div>
+                            <span class="badge badge-gold" style="font-size: 0.65rem;">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Description / Problem Statement -->
+<section class="py-5 bg-dark bg-opacity-50 border-top border-bottom border-secondary">
+    <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <span class="badge badge-gold mb-2">MSc Research Project Context</span>
+                <h2 class="display-5 fw-bold text-white mb-3">Why Guided Pathways Over Generic Chatbots?</h2>
+                <p class="lead text-muted">
+                    Generic AI chatbots provide unverified long text blocks that often lead to cognitive overload and academic distraction. Our platform delivers curated, progressive educational pathways tailored to higher education curricula.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-panel p-4 h-100 text-center">
+                    <div class="rounded-circle bg-danger bg-opacity-20 p-3 d-inline-flex mb-3 text-danger border border-danger">
+                        <i class="bi bi-x-circle-fill fs-2"></i>
+                    </div>
+                    <h5 class="text-white">Scattered Information</h5>
+                    <p class="text-muted small">Students waste up to 4 hours per week searching across fragmented LMS portals, PDFs, YouTube, and forums.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-panel p-4 h-100 text-center">
+                    <div class="rounded-circle bg-warning bg-opacity-20 p-3 d-inline-flex mb-3 text-warning border border-warning">
+                        <i class="bi bi-exclamation-triangle-fill fs-2"></i>
+                    </div>
+                    <h5 class="text-white">Academic Misalignment</h5>
+                    <p class="text-muted small">Standard chat tools do not structure learning into progressive weekly milestones aligned with university degree outcomes.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-panel p-4 h-100 text-center">
+                    <div class="rounded-circle bg-success bg-opacity-20 p-3 d-inline-flex mb-3 text-success border border-success">
+                        <i class="bi bi-check-circle-fill fs-2"></i>
+                    </div>
+                    <h5 class="text-white">One Guided Hub</h5>
+                    <p class="text-muted small">Our platform provides personalized roadmaps, interactive tutor guidance, notes summarization, and study scheduling in one unified SaaS UI.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feature Showcase Grid -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge badge-emerald mb-2">Comprehensive SaaS Suite</span>
+            <h2 class="display-5 fw-bold text-white">Empowering University Academic Excellence</h2>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 bg-success bg-opacity-20 p-3 border border-success text-success">
+                            <i class="bi bi-signpost-split fs-3"></i>
+                        </div>
+                        <h5 class="text-white mb-0">Guided Roadmaps</h5>
+                    </div>
+                    <p class="text-muted small">Generate week-by-week learning pathways tailored to your current level (Beginner/Intermediate/Advanced) and study goal.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 bg-success bg-opacity-20 p-3 border border-success text-success">
+                            <i class="bi bi-robot fs-3"></i>
+                        </div>
+                        <h5 class="text-white mb-0">AI Academic Tutor</h5>
+                    </div>
+                    <p class="text-muted small">Interactive 24/7 tutor providing deep conceptual explanations, code snippets, and follow-up Q&A sessions.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 bg-success bg-opacity-20 p-3 border border-success text-success">
+                            <i class="bi bi-file-earmark-text fs-3"></i>
+                        </div>
+                        <h5 class="text-white mb-0">Notes Summariser</h5>
+                    </div>
+                    <p class="text-muted small">Transform raw lecture notes into executive takeaways, key concepts, and active recall revision flashcards instantly.</p>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 bg-warning bg-opacity-20 p-3 border border-warning text-warning">
+                            <i class="bi bi-calendar3 fs-3"></i>
+                        </div>
+                        <h5 class="text-white mb-0">Smart Study Planner</h5>
+                    </div>
+                    <p class="text-muted small">Allocate weekly study hours intelligently across modules and generate structured Pomodoro study schedules.</p>
+                </div>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 bg-warning bg-opacity-20 p-3 border border-warning text-warning">
+                            <i class="bi bi-journal-bookmark fs-3"></i>
+                        </div>
+                        <h5 class="text-white mb-0">Assignment Guidance</h5>
+                    </div>
+                    <p class="text-muted small">Academic integrity compliant paper outlines, research question formulations, and literature review strategies.</p>
+                </div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 bg-warning bg-opacity-20 p-3 border border-warning text-warning">
+                            <i class="bi bi-star-fill fs-3"></i>
+                        </div>
+                        <h5 class="text-white mb-0">SUS Research Module</h5>
+                    </div>
+                    <p class="text-muted small">Standardized System Usability Scale (SUS) 10-item evaluation suite storing empirical usability data for MSc dissertation analysis.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5 bg-dark bg-opacity-40 border-top border-secondary">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="badge badge-gold mb-2">Student Feedback</span>
+            <h2 class="display-6 fw-bold text-white">Loved by Higher Education Scholars</h2>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-panel p-4 h-100">
+                    <div class="text-warning mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-muted fst-italic">"The structured week-by-week roadmaps helped me prepare for my MSc Machine Learning exams in half the time. Game changer!"</p>
+                    <div class="d-flex align-items-center gap-3 mt-4">
+                        <div class="rounded-circle bg-emerald p-2 text-white fw-bold">CU</div>
+                        <div>
+                            <h6 class="text-white mb-0">Alex M.</h6>
+                            <small class="text-muted">MSc Data Science, Coventry University</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="glass-panel p-4 h-100">
+                    <div class="text-warning mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-muted fst-italic">"The Notes Summariser converted 50 pages of dense lecture slides into crisp revision flashcards instantly."</p>
+                    <div class="d-flex align-items-center gap-3 mt-4">
+                        <div class="rounded-circle bg-emerald p-2 text-white fw-bold">CU</div>
+                        <div>
+                            <h6 class="text-white mb-0">Priya K.</h6>
+                            <small class="text-muted">MSc Cyber Security, Coventry University</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-panel p-4 h-100">
+                    <div class="text-warning mb-3">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-muted fst-italic">"I love that the assignment guide enforces academic integrity rather than just writing papers for you. Highly recommended!"</p>
+                    <div class="d-flex align-items-center gap-3 mt-4">
+                        <div class="rounded-circle bg-emerald p-2 text-white fw-bold">CU</div>
+                        <div>
+                            <h6 class="text-white mb-0">David L.</h6>
+                            <small class="text-muted">BSc Computer Science</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQs -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold text-white">Frequently Asked Questions</h2>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="accordion accordion-flush glass-panel p-3" id="faqAccordion">
+                    <div class="accordion-item bg-transparent text-white border-bottom border-secondary">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent text-white fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How does this platform adhere to Coventry University Academic Integrity Policy?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                Our platform strictly acts as a scaffolding learning assistant. The Assignment Guidance module provides theoretical frameworks, literature review structures, and research directions without ghostwriting or producing submitted assignment text.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item bg-transparent text-white border-bottom border-secondary">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent text-white fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What is the System Usability Scale (SUS) survey?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                The System Usability Scale (SUS) is an industry-standard 10-item Likert scale used in human-computer interaction (HCI) research to measure user satisfaction, learnability, and application usability on a 0 to 100 scale.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item bg-transparent text-white border-0">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent text-white fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Do I need an OpenAI API key to use this platform?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                No! While full OpenAI API integration is supported via configuration, the system incorporates a built-in Smart AI Engine fallback so all roadmaps, tutor answers, notes summarization, and exam prep work 100% locally out-of-the-box.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 mb-4">
+    <div class="container">
+        <div class="glass-panel p-5 text-center position-relative border border-emerald overflow-hidden">
+            <div class="position-relative z-1">
+                <h2 class="display-5 fw-bold text-white mb-3">Ready to Elevate Your University Grades?</h2>
+                <p class="lead text-muted mb-4" style="max-width: 600px; margin: 0 auto;">Join Coventry University students mastering their subjects with AI-guided learning pathways.</p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-emerald btn-lg px-5 py-3 fs-5">
+                    <i class="bi bi-rocket-takeoff-fill me-2"></i> Create Your Student Account
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

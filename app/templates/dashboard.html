@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome Banner -->
+<div class="glass-panel p-4 p-md-5 mb-4 border border-emerald position-relative overflow-hidden">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-2 rounded-pill bg-success bg-opacity-20 border border-success">
+                <i class="bi bi-mortarboard-fill text-success"></i>
+                <span class="small text-emerald fw-bold">{{ current_user.university }} • {{ current_user.degree_program }}</span>
+            </div>
+            <h2 class="display-6 fw-bold text-white mb-2">Welcome back, {{ current_user.username }}! 👋</h2>
+            <p class="text-muted lead mb-0">Ready to make progress on your academic learning pathways today?</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+            <a href="{{ url_for('roadmap.create') }}" class="btn btn-emerald btn-lg shadow-sm">
+                <i class="bi bi-plus-circle-fill me-2"></i> New Learning Pathway
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- KPI Study Statistics Row -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-success bg-opacity-20 p-3 text-success border border-success">
+                <i class="bi bi-signpost-split-fill fs-3"></i>
+            </div>
+            <div>
+                <div class="text-muted small">Pathways Created</div>
+                <h3 class="fw-bold text-white mb-0">{{ total_roadmaps }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-warning bg-opacity-20 p-3 text-warning border border-warning">
+                <i class="bi bi-trophy-fill fs-3"></i>
+            </div>
+            <div>
+                <div class="text-muted small">Completed Roadmaps</div>
+                <h3 class="fw-bold text-white mb-0">{{ completed_roadmaps }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-info bg-opacity-20 p-3 text-info border border-info">
+                <i class="bi bi-robot fs-3"></i>
+            </div>
+            <div>
+                <div class="text-muted small">Tutor Queries</div>
+                <h3 class="fw-bold text-white mb-0">{{ total_chats }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card p-3 d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-primary bg-opacity-20 p-3 text-primary border border-primary">
+                <i class="bi bi-award-fill fs-3"></i>
+            </div>
+            <div>
+                <div class="text-muted small">Badges Unlocked</div>
+                <h3 class="fw-bold text-white mb-0">{{ achievements|length }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Active Learning Pathway Card -->
+    <div class="col-lg-7">
+        <div class="glass-panel p-4 h-100 border border-success">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-white mb-0"><i class="bi bi-signpost-split text-emerald me-2"></i> Active Guided Pathway</h5>
+                {% if active_roadmap %}
+                    <span class="badge badge-emerald">{{ active_roadmap.level }}</span>
+                {% endif %}
+            </div>
+
+            {% if active_roadmap %}
+                <div class="glass-card p-3 mb-3 border border-secondary">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h4 class="fw-bold text-white mb-1">{{ active_roadmap.topic }}</h4>
+                            <small class="text-muted"><i class="bi bi-bullseye me-1 text-warning"></i> Purpose: {{ active_roadmap.purpose }} • {{ active_roadmap.hours_per_week }} hrs/week</small>
+                        </div>
+                        <span class="badge bg-success">{{ active_roadmap.status }}</span>
+                    </div>
+
+                    <div class="my-3">
+                        <div class="d-flex justify-content-between small text-white-50 mb-1">
+                            <span>Pathway Progress</span>
+                            <span class="fw-bold text-success">{{ active_roadmap.progress_percent }}%</span>
+                        </div>
+                        <div class="progress progress-custom">
+                            <div class="progress-bar progress-bar-emerald" style="width: {{ active_roadmap.progress_percent }}%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <a href="{{ url_for('roadmap.view', roadmap_id=active_roadmap.id) }}" class="btn btn-emerald btn-sm">
+                            Continue Pathway <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-4 border border-dashed border-secondary rounded p-4">
+                    <i class="bi bi-signpost text-muted display-4 mb-2"></i>
+                    <h5 class="text-white">No active roadmap yet</h5>
+                    <p class="text-muted small">Start by defining what topic or subject you want to master.</p>
+                    <a href="{{ url_for('roadmap.create') }}" class="btn btn-emerald btn-sm mt-2">
+                        <i class="bi bi-plus-lg me-1"></i> Create First Roadmap
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Quick Feature Actions Grid -->
+            <div class="pt-3 border-top border-secondary mt-3">
+                <h6 class="text-muted small fw-bold text-uppercase mb-3">Quick AI Tools</h6>
+                <div class="row g-2">
+                    <div class="col-4">
+                        <a href="{{ url_for('tutor.index') }}" class="btn btn-outline-glass w-100 py-2 text-start text-truncate">
+                            <i class="bi bi-robot text-success me-1"></i> AI Tutor
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        <a href="{{ url_for('notes.index') }}" class="btn btn-outline-glass w-100 py-2 text-start text-truncate">
+                            <i class="bi bi-file-earmark-text text-success me-1"></i> Summariser
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        <a href="{{ url_for('planner.index') }}" class="btn btn-outline-glass w-100 py-2 text-start text-truncate">
+                            <i class="bi bi-calendar3 text-warning me-1"></i> Study Planner
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements & Recent Activity -->
+    <div class="col-lg-5">
+        <div class="glass-panel p-4 h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-award text-warning me-2"></i> Academic Achievements</h5>
+            
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                {% for badge in achievements %}
+                    <div class="p-2 rounded glass-card border border-warning d-flex align-items-center gap-2" style="min-width: 140px;" data-bs-toggle="tooltip" title="{{ badge.description }}">
+                        <i class="bi {{ badge.icon_class }} text-warning fs-4"></i>
+                        <div>
+                            <div class="fw-bold text-white small" style="font-size: 0.75rem;">{{ badge.title }}</div>
+                            <small class="text-muted" style="font-size: 0.65rem;">Unlocked</small>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted small">Complete roadmaps, ask tutor questions, or submit feedback to unlock academic badges!</p>
+                {% endfor %}
+            </div>
+
+            <h6 class="fw-bold text-white border-top border-secondary pt-3 mb-3"><i class="bi bi-clock-history text-emerald me-2"></i> Recent Learning Log</h6>
+            <div class="vstack gap-2">
+                {% for log in recent_history %}
+                    <div class="p-2 rounded bg-dark bg-opacity-50 border border-secondary d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="badge bg-secondary me-2" style="font-size: 0.65rem;">{{ log.activity_type }}</span>
+                            <span class="small text-white">{{ log.activity_title }}</span>
+                        </div>
+                        <small class="text-muted" style="font-size: 0.7rem;">{{ log.timestamp.strftime('%d %b %H:%M') }}</small>
+                    </div>
+                {% else %}
+                    <p class="text-muted small">No recent activity recorded yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Assignment Guidance{% endblock %}
+
+{% block content %}
+<div class="glass-panel p-4 mb-4 border border-emerald">
+    <div class="d-flex align-items-center gap-3">
+        <div class="rounded-circle p-3 d-inline-flex" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald-accent);">
+            <i class="bi bi-journal-bookmark-fill text-emerald fs-2"></i>
+        </div>
+        <div>
+            <h3 class="fw-bold text-white mb-0">Academic Assignment Guidance Scaffolder</h3>
+            <p class="text-muted mb-0 small">Structural outlines, literature review strategies, and research guidance in full compliance with university honor codes</p>
+        </div>
+    </div>
+</div>
+
+<!-- Academic Integrity Warning Banner -->
+<div class="alert alert-warning glass-panel border-warning text-white d-flex align-items-center gap-3 mb-4" role="alert">
+    <i class="bi bi-shield-lock-fill text-warning fs-3"></i>
+    <div>
+        <strong class="text-warning">Coventry University Academic Integrity Notice:</strong>
+        <span class="small text-white-50 d-block">This tool provides architectural frameworks, research questions, and structural guidance to scaffold your learning. It explicitly refrains from generating full assignment text to enforce original student authorship.</span>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Input Form -->
+    <div class="col-lg-4">
+        <div class="glass-panel p-4 border border-secondary h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-pencil me-2 text-emerald"></i> Assignment Topic</h5>
+            
+            <form method="POST" action="{{ url_for('assignment.index') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <div class="mb-3">
+                    <label for="topic" class="form-label text-white-50 small fw-bold">Assignment / Paper Title or Topic</label>
+                    <input type="text" class="form-control form-control-glass" id="topic" name="topic" placeholder="e.g. Critical Analysis of Transformer Models in NLP" value="{{ topic }}" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="level" class="form-label text-white-50 small fw-bold">Degree Level</label>
+                    <select class="form-select form-select-glass" id="level" name="level">
+                        <option value="Postgraduate (MSc)" {% if level == 'Postgraduate (MSc)' %}selected{% endif %}>Postgraduate (MSc)</option>
+                        <option value="Undergraduate (BSc)" {% if level == 'Undergraduate (BSc)' %}selected{% endif %}>Undergraduate (BSc)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-emerald w-100 py-2.5">
+                    <i class="bi bi-diagram-3 me-2"></i> Scaffold Assignment Framework
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Output Guidance Grid -->
+    <div class="col-lg-8">
+        <div class="glass-panel p-4 border border-success h-100">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-journal-text me-2 text-warning"></i> Structural Framework & Research Guidance</h5>
+
+            {% if guidance %}
+                <div class="vstack gap-3">
+                    <!-- Suggested Structure -->
+                    <div>
+                        <h6 class="text-emerald fw-bold mb-2"><i class="bi bi-list-nested me-1"></i> Recommended Paper Structure</h6>
+                        <div class="vstack gap-2">
+                            {% for section in guidance.suggested_structure %}
+                                <div class="p-3 rounded glass-card border border-secondary">
+                                    <div class="fw-bold text-white mb-1" style="font-size: 0.9rem;">{{ section.section }}</div>
+                                    <small class="text-white-50 d-block">{{ section.guidance }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Research Questions -->
+                    <div class="p-3 rounded glass-card border border-warning mt-2">
+                        <h6 class="text-warning fw-bold mb-2"><i class="bi bi-patch-question me-1"></i> Formulated Research Questions</h6>
+                        <ul class="mb-0 text-white-50 small ps-3">
+                            {% for rq in guidance.research_questions %}
+                                <li class="mb-1">{{ rq }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Recommended Citation References -->
+                    <div class="p-3 rounded glass-card border border-secondary mt-2">
+                        <h6 class="text-info fw-bold mb-2"><i class="bi bi-book me-1"></i> Academic Citation & Reference Literature</h6>
+                        <ul class="mb-0 text-white-50 small ps-3" style="font-family: monospace;">
+                            {% for ref in guidance.key_academic_references %}
+                                <li class="mb-1">{{ ref }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-file-earmark-code display-3 mb-3 text-emerald d-block"></i>
+                    <h5 class="text-white">Need assignment scaffolding?</h5>
+                    <p class="small text-muted" style="max-width: 420px; margin: 0 auto;">Enter your assignment topic on the left to generate structural section breakdowns and literature strategies.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
