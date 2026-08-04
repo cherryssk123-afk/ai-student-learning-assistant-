@@ -13,8 +13,11 @@ from student_app import create_app, db
 
 app = create_app()
 
-with app.app_context():
-    try:
-        db.create_all()
-    except Exception as e:
-        print(f"Database init warning: {e}")
+@app.before_request
+def initialize_database_once():
+    if not getattr(app, '_got_db_init', False):
+        try:
+            db.create_all()
+            app._got_db_init = True
+        except Exception as e:
+            print(f"Database init warning: {e}")
