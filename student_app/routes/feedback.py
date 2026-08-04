@@ -23,12 +23,14 @@ SUS_QUESTIONS = [
 @feedback_bp.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    user_feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()
-    latest_feedback = user_feedbacks[0] if user_feedbacks else None
-
-    # Calculate global average SUS score for academic evaluation context
-    all_feedbacks = Feedback.query.all()
-    avg_sus = round(sum(f.sus_score for f in all_feedbacks) / len(all_feedbacks), 1) if all_feedbacks else 0.0
+    try:
+        user_feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()
+        latest_feedback = user_feedbacks[0] if user_feedbacks else None
+        all_feedbacks = Feedback.query.all()
+        avg_sus = round(sum(f.sus_score for f in all_feedbacks) / len(all_feedbacks), 1) if all_feedbacks else 0.0
+    except Exception as e:
+        print(f"Feedback query fallback: {e}")
+        user_feedbacks, latest_feedback, avg_sus = [], None, 0.0
 
     if request.method == 'POST':
         try:

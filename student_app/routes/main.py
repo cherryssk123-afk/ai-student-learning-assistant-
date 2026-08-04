@@ -30,19 +30,21 @@ def set_api_key():
 @main_bp.route('/dashboard')
 @login_required
 def dashboard():
-    # Evaluate achievements
-    check_and_award_achievements(current_user)
-    
-    roadmaps = current_user.roadmaps.order_by(LearningRoadmap.created_at.desc()).all()
-    active_roadmap = current_user.roadmaps.filter(LearningRoadmap.status != 'Completed').order_by(LearningRoadmap.created_at.desc()).first()
-    recent_study_plan = current_user.study_plans.order_by(StudyPlan.created_at.desc()).first()
-    recent_history = current_user.history.order_by(LearningHistory.timestamp.desc()).limit(6).all()
-    achievements = current_user.achievements.order_by(Achievement.unlocked_at.desc()).all()
-    
-    total_roadmaps = len(roadmaps)
-    completed_roadmaps = sum(1 for r in roadmaps if r.status == 'Completed')
-    total_chats = current_user.chats.count()
-    has_feedback = current_user.feedbacks.count() > 0
+    try:
+        check_and_award_achievements(current_user)
+        roadmaps = current_user.roadmaps.order_by(LearningRoadmap.created_at.desc()).all()
+        active_roadmap = current_user.roadmaps.filter(LearningRoadmap.status != 'Completed').order_by(LearningRoadmap.created_at.desc()).first()
+        recent_study_plan = current_user.study_plans.order_by(StudyPlan.created_at.desc()).first()
+        recent_history = current_user.history.order_by(LearningHistory.timestamp.desc()).limit(6).all()
+        achievements = current_user.achievements.order_by(Achievement.unlocked_at.desc()).all()
+        total_roadmaps = len(roadmaps)
+        completed_roadmaps = sum(1 for r in roadmaps if r.status == 'Completed')
+        total_chats = current_user.chats.count()
+        has_feedback = current_user.feedbacks.count() > 0
+    except Exception as e:
+        print(f"Dashboard query fallback: {e}")
+        roadmaps, active_roadmap, recent_study_plan, recent_history, achievements = [], None, None, [], []
+        total_roadmaps, completed_roadmaps, total_chats, has_feedback = 0, 0, 0, False
 
     return render_template(
         'dashboard.html',
@@ -60,10 +62,14 @@ def dashboard():
 @main_bp.route('/profile')
 @login_required
 def profile():
-    roadmaps = current_user.roadmaps.all()
-    achievements = current_user.achievements.all()
-    history = current_user.history.order_by(LearningHistory.timestamp.desc()).all()
-    feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()
+    try:
+        roadmaps = current_user.roadmaps.all()
+        achievements = current_user.achievements.all()
+        history = current_user.history.order_by(LearningHistory.timestamp.desc()).all()
+        feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()
+    except Exception as e:
+        print(f"Profile query fallback: {e}")
+        roadmaps, achievements, history, feedbacks = [], [], [], []
     
     return render_template(
         'profile.html',

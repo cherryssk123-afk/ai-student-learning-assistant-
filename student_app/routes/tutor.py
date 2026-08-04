@@ -11,14 +11,18 @@ tutor_bp = Blueprint('tutor', __name__)
 @tutor_bp.route('/', methods=['GET'])
 @login_required
 def index():
-    # Fetch or create current user active tutor session
-    chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
-    if not chat_session:
-        chat_session = TutorChat(user_id=current_user.id, session_title='Academic AI Study Session')
-        db.session.add(chat_session)
-        db.session.commit()
+    try:
+        chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
+        if not chat_session:
+            chat_session = TutorChat(user_id=current_user.id, session_title='Academic AI Study Session')
+            db.session.add(chat_session)
+            db.session.commit()
+        messages = chat_session.get_messages()
+    except Exception as e:
+        print(f"Tutor index fallback: {e}")
+        db.session.rollback()
+        chat_session, messages = None, []
 
-    messages = chat_session.get_messages()
     return render_template('tutor.html', chat_session=chat_session, messages=messages)
 
 @tutor_bp.route('/ask', methods=['POST'])
@@ -39,13 +43,16 @@ def ask():
             return redirect(url_for('tutor.index'))
         return jsonify({'success': False, 'error': 'Question cannot be empty.'}), 400
 
-    chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
-    if not chat_session:
-        chat_session = TutorChat(user_id=current_user.id, session_title=f'Study Session: {question[:30]}')
-        db.session.add(chat_session)
+    try:
+        chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
+        if not chat_session:
+            chat_session = TutorChat(user_id=current_user.id, session_title=f'Study Session: {question[:30]}')
+            db.session.add(chat_session)
+        history = chat_session.get_messages()
+    except Exception as e:
+        print(f"Tutor ask fetch fallback: {e}")
+        chat_session, history = None, []
 
-    history = chat_session.get_messages()
-    
     # User message
     user_msg = {
         'role': 'user',
@@ -64,12 +71,16 @@ def ask():
     }
     history.append(assistant_msg)
 
-    chat_session.set_messages(history)
-    chat_session.updated_at = datetime.utcnow()
-    db.session.commit()
-
-    log_activity(current_user.id, 'Tutor', 'Asked AI Tutor', f'Question: "{question[:50]}..."')
-    check_and_award_achievements(current_user)
+    try:
+        if chat_session:
+            chat_session.set_messages(history)
+            chat_session.updated_at = datetime.utcnow()
+            db.session.commit()
+            log_activity(current_user.id, 'Tutor', 'Asked AI Tutor', f'Question: "{question[:50]}..."')
+            check_and_award_achievements(current_user)
+    except Exception as e:
+        print(f"Tutor ask save fallback: {e}")
+        db.session.rollback()
 
     if not request.is_json:
         return redirect(url_for('tutor.index'))
@@ -83,9 +94,13 @@ def ask():
 @tutor_bp.route('/clear', methods=['POST'])
 @login_required
 def clear():
-    chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
-    if chat_session:
-        chat_session.set_messages([])
-        db.session.commit()
-        flash('AI Tutor chat history reset.', 'info')
+    try:
+        chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
+        if chat_session:
+            chat_session.set_messages([])
+            db.session.commit()
+            flash('AI Tutor chat history reset.', 'info')
+    except Exception as e:
+        print(f"Tutor clear fallback: {e}")
+        db.session.rollback()
     return redirect(url_for('tutor.index'))
