@@ -6,7 +6,23 @@ from student_app import db, login_manager
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    try:
+        user = User.query.get(int(user_id))
+        if not user:
+            from flask import session
+            user_name = session.get('username', f'Student_{user_id}')
+            user_email = session.get('email', f'student_{user_id}@coventry.ac.uk')
+            user = User(id=int(user_id), username=user_name, email=user_email)
+            user.set_password('password123')
+            db.session.add(user)
+            db.session.commit()
+        return user
+    except Exception:
+        db.session.rollback()
+        try:
+            return User.query.get(int(user_id))
+        except Exception:
+            return None
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

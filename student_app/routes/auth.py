@@ -53,6 +53,8 @@ def register():
 
         log_activity(user.id, 'Authentication', 'Registered Account', f'Registered with email {email}')
         login_user(user)
+        session['username'] = user.username
+        session['email'] = user.email
         flash('Welcome to AI-Powered Student Learning Assistant! Your account has been created.', 'success')
         return redirect(url_for('main.dashboard'))
 
@@ -75,6 +77,8 @@ def login():
             return render_template('auth/login.html')
 
         login_user(user, remember=remember)
+        session['username'] = user.username
+        session['email'] = user.email
         log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
         flash(f'Welcome back, {user.username}!', 'success')
         
