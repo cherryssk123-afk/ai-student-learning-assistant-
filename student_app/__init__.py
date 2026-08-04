@@ -46,6 +46,19 @@ def create_app(config_class='student_app.config.Config'):
 
     # Create database tables if they do not exist
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+        except Exception:
+            pass
+
+    # Global exception handler to catch any unhandled 500 errors gracefully
+    @app.errorhandler(500)
+    def handle_500_error(e):
+        try:
+            db.session.rollback()
+        except Exception:
+            pass
+        from flask import redirect, url_for
+        return redirect(url_for('main.index'))
 
     return app
