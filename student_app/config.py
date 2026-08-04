@@ -8,16 +8,15 @@ class Config:
     
     # Check if running on Vercel or read-only serverless environment
     if os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'):
-        INSTANCE_DIR = '/tmp'
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:////tmp/app.db'
     else:
         INSTANCE_DIR = os.path.join(BASE_DIR, 'instance')
         try:
             os.makedirs(INSTANCE_DIR, exist_ok=True)
+            db_path = os.path.join(INSTANCE_DIR, 'app.db').replace('\\', '/')
+            SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + db_path
         except OSError:
-            INSTANCE_DIR = '/tmp'
-    
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(INSTANCE_DIR, 'app.db')
+            SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:////tmp/app.db'
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
