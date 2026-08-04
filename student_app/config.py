@@ -8,7 +8,7 @@ class Config:
     
     # Check if running on Vercel or read-only serverless environment
     if os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'):
-        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:////tmp/app.db'
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///:memory:?check_same_thread=False'
     else:
         INSTANCE_DIR = os.path.join(BASE_DIR, 'instance')
         try:
@@ -16,7 +16,7 @@ class Config:
             db_path = os.path.join(INSTANCE_DIR, 'app.db').replace('\\', '/')
             SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + db_path
         except OSError:
-            SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:////tmp/app.db'
+            SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///:memory:?check_same_thread=False'
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
