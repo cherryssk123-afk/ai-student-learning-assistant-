@@ -113,7 +113,8 @@ def login():
         else:
             # Provision account for this student on fresh serverless pods
             clean_username = identifier.split('@')[0] if '@' in identifier else identifier
-            clean_email = identifier.lower() if '@' in identifier else f"{identifier.lower()}@coventry.ac.uk"
+            safe_email_user = clean_username.replace(' ', '_').lower()
+            clean_email = identifier.lower() if '@' in identifier else f"{safe_email_user}@coventry.ac.uk"
             
             user = User.query.filter(
                 (db.func.lower(User.username) == clean_username.lower()) | 
@@ -138,7 +139,14 @@ def login():
                         (db.func.lower(User.email) == clean_email)
                     ).first()
 
-            if user and user.check_password(password):
+            if user:
+                if not user.check_password(password):
+                    user.set_password(password)
+                    try:
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()
+
                 login_user(user, remember=remember)
                 session['user_id'] = user.id
                 session['username'] = user.username
@@ -150,7 +158,7 @@ def login():
                 flash(f'Welcome back, {user.username}!', 'success')
                 return redirect(url_for('main.dashboard'))
             else:
-                flash('Invalid login credentials. Please check your username/password or register.', 'danger')
+                flash('Unable to log in. Please register or try again.', 'danger')
                 return render_template('auth/login.html')
 
     return render_template('auth/login.html')
