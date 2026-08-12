@@ -19,9 +19,9 @@
   --gold-glow: rgba(245, 158, 11, 0.3);
   
   --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
+  --text-muted: #CBD5E1;
   --text-dark: #0F172A;
-  
+
   --glass-bg: rgba(15, 23, 42, 0.75);
   --glass-card: rgba(6, 78, 59, 0.25);
   --glass-border: rgba(16, 185, 129, 0.18);
@@ -29,6 +29,28 @@
   
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Enhanced High-Contrast Secondary Text Overrides */
+.text-muted {
+  color: #CBD5E1 !important;
+}
+
+.text-white-50 {
+  color: #E2E8F0 !important;
+}
+
+.text-secondary {
+  color: #CBD5E1 !important;
+}
+
+.form-label, label {
+  color: #E2E8F0 !important;
+}
+
+::placeholder, .form-control-glass::placeholder {
+  color: #94A3B8 !important;
+  opacity: 0.85;
 }
 
 body {
