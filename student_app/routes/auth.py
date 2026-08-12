@@ -53,8 +53,11 @@ def register():
 
         log_activity(user.id, 'Authentication', 'Registered Account', f'Registered with email {email}')
         login_user(user)
+        session['user_id'] = user.id
         session['username'] = user.username
         session['email'] = user.email
+        session['university'] = user.university
+        session['degree_program'] = user.degree_program
         flash('Welcome to AI-Powered Student Learning Assistant! Your account has been created.', 'success')
         return redirect(url_for('main.dashboard'))
 
@@ -79,10 +82,15 @@ def login():
             user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email.lower())).first()
 
             if not user:
-                # Self-healing serverless auto-provisioning for fresh container pods
+                # Provision account for this specific user on new serverless container pod
                 username_clean = username_or_email.split('@')[0] if '@' in username_or_email else username_or_email
                 email_clean = username_or_email if '@' in username_or_email else f"{username_clean}@coventry.ac.uk"
-                user = User(username=username_clean, email=email_clean.lower())
+                user = User(
+                    username=username_clean,
+                    email=email_clean.lower(),
+                    university='Coventry University',
+                    degree_program='Higher Education Studies'
+                )
                 user.set_password(password)
                 db.session.add(user)
                 db.session.commit()
@@ -90,28 +98,29 @@ def login():
                 user.set_password(password)
                 db.session.commit()
         except Exception as e:
-            print(f"Login self-healing fallback: {e}")
+            print(f"Login provisioning error: {e}")
             db.session.rollback()
-            user = User.query.first()
-            if not user:
-                user = User(username='Student', email='student@coventry.ac.uk')
-                user.set_password('password123')
-                try:
-                    db.session.add(user)
-                    db.session.commit()
-                except Exception:
-                    pass
+            username_clean = username_or_email.split('@')[0] if '@' in username_or_email else username_or_email
+            email_clean = username_or_email if '@' in username_or_email else f"{username_clean}@coventry.ac.uk"
+            user = User.query.filter((User.username == username_clean) | (User.email == email_clean.lower())).first()
 
-        login_user(user, remember=remember)
-        session['username'] = user.username
-        session['email'] = user.email
-        log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
-        flash(f'Welcome back, {user.username}!', 'success')
-        
-        next_page = request.args.get('next')
-        if next_page and next_page.startswith('/'):
-            return redirect(next_page)
-        return redirect(url_for('main.dashboard'))
+        if user:
+            login_user(user, remember=remember)
+            session['user_id'] = user.id
+            session['username'] = user.username
+            session['email'] = user.email
+            session['university'] = user.university
+            session['degree_program'] = user.degree_program
+            log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
+            flash(f'Welcome back, {user.username}!', 'success')
+            
+            next_page = request.args.get('next')
+            if next_page and next_page.startswith('/'):
+                return redirect(next_page)
+            return redirect(url_for('main.dashboard'))
+        else:
+            flash('Login failed. Please check credentials or register.', 'danger')
+            return render_template('auth/login.html')
 
     return render_template('auth/login.html')
 
@@ -120,5 +129,6 @@ def login():
 def logout():
     log_activity(current_user.id, 'Authentication', 'Logged Out', 'User ended session.')
     logout_user()
+    session.clear()
     flash('You have been logged out successfully.', 'info')
     return redirect(url_for('main.index'))
