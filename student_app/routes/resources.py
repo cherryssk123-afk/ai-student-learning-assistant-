@@ -6,7 +6,6 @@ from student_app.utils.helpers import log_activity
 resources_bp = Blueprint('resources', __name__)
 
 @resources_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
     resources_data = None
     topic = "Machine Learning"

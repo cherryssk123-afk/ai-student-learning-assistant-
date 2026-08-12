@@ -21,7 +21,6 @@ SUS_QUESTIONS = [
 ]
 
 @feedback_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
     try:
         user_feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()

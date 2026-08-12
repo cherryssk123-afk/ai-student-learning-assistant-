@@ -9,7 +9,6 @@ from student_app.utils.helpers import log_activity, check_and_award_achievements
 roadmap_bp = Blueprint('roadmap', __name__)
 
 @roadmap_bp.route('/create', methods=['GET', 'POST'])
-@login_required
 def create():
     if request.method == 'POST':
         topic = request.form.get('topic', '').strip()
@@ -64,7 +63,6 @@ def create():
     return render_template('roadmap/create.html')
 
 @roadmap_bp.route('/<int:roadmap_id>')
-@login_required
 def view(roadmap_id):
     try:
         roadmap = LearningRoadmap.query.get(roadmap_id)
@@ -77,7 +75,6 @@ def view(roadmap_id):
         return redirect(url_for('main.dashboard'))
 
 @roadmap_bp.route('/<int:roadmap_id>/toggle-week/<int:week_id>', methods=['POST'])
-@login_required
 def toggle_week(roadmap_id, week_id):
     try:
         roadmap = LearningRoadmap.query.get(roadmap_id)
@@ -112,7 +109,6 @@ def toggle_week(roadmap_id, week_id):
         return jsonify({'success': False, 'error': 'Error updating database.'}), 500
 
 @roadmap_bp.route('/<int:roadmap_id>/delete', methods=['POST'])
-@login_required
 def delete(roadmap_id):
     try:
         roadmap = LearningRoadmap.query.get(roadmap_id)

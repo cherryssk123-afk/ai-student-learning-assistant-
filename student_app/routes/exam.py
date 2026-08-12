@@ -6,7 +6,6 @@ from student_app.utils.helpers import log_activity
 exam_bp = Blueprint('exam', __name__)
 
 @exam_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
     prep_data = None
     topic = ""

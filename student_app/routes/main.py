@@ -42,7 +42,6 @@ def set_api_key():
     return redirect(request.referrer or url_for('main.dashboard'))
 
 @main_bp.route('/dashboard')
-@login_required
 def dashboard():
     try:
         check_and_award_achievements(current_user)
@@ -74,7 +73,6 @@ def dashboard():
     )
 
 @main_bp.route('/profile')
-@login_required
 def profile():
     try:
         roadmaps = current_user.roadmaps.all()

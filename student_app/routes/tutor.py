@@ -9,7 +9,6 @@ from student_app.utils.helpers import log_activity, check_and_award_achievements
 tutor_bp = Blueprint('tutor', __name__)
 
 @tutor_bp.route('/', methods=['GET'])
-@login_required
 def index():
     try:
         chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()
@@ -27,7 +26,6 @@ def index():
 
 @tutor_bp.route('/ask', methods=['POST'])
 @csrf.exempt
-@login_required
 def ask():
     if request.is_json:
         data = request.get_json() or {}
@@ -92,7 +90,6 @@ def ask():
     })
 
 @tutor_bp.route('/clear', methods=['POST'])
-@login_required
 def clear():
     try:
         chat_session = TutorChat.query.filter_by(user_id=current_user.id).order_by(TutorChat.updated_at.desc()).first()

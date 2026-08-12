@@ -9,7 +9,6 @@ from student_app.utils.helpers import log_activity, check_and_award_achievements
 planner_bp = Blueprint('planner', __name__)
 
 @planner_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
     study_plans = current_user.study_plans.order_by(StudyPlan.created_at.desc()).all()
     active_plan = study_plans[0] if study_plans else None

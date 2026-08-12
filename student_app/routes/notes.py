@@ -6,7 +6,6 @@ from student_app.utils.helpers import log_activity, check_and_award_achievements
 notes_bp = Blueprint('notes', __name__)
 
 @notes_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
     summary_data = None
     raw_notes = ""

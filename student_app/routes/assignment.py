@@ -6,7 +6,6 @@ from student_app.utils.helpers import log_activity
 assignment_bp = Blueprint('assignment', __name__)
 
 @assignment_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
     guidance = None
     topic = ""
