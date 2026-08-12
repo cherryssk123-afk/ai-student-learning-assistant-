@@ -34,55 +34,74 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
-                    {% if current_user.is_authenticated %}
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-outline-glass btn-sm text-light d-flex align-items-center gap-1 py-1 px-2" data-bs-toggle="modal" data-bs-target="#apiKeyModal">
-                                <span class="badge {{ ai_mode.badge_class }}" style="font-size: 0.65rem;"><i class="bi bi-cpu-fill me-1"></i> {{ ai_mode.label }}</span>
-                                <i class="bi bi-key-fill text-warning ms-1"></i> <span class="d-none d-xl-inline">API Settings</span>
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('main.dashboard') }}">
-                                <i class="bi bi-speedometer2 text-emerald"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('roadmap.create') }}">
-                                <i class="bi bi-signpost-split text-emerald"></i> Create Roadmap
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('feedback.index') }}">
-                                <i class="bi bi-star-fill text-warning"></i> SUS Feedback
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown ms-lg-2">
-                            <a class="nav-link dropdown-toggle btn btn-outline-glass px-3 py-1 text-light d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle text-emerald"></i> {{ current_user.username }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end glass-panel border border-secondary shadow-lg">
-                                <li>
-                                    <div class="dropdown-header text-white-50">
-                                        <small>{{ current_user.email }}</small><br>
-                                        <span class="badge badge-emerald mt-1">{{ current_user.degree_program }}</span>
-                                    </div>
-                                </li>
-                                <li><hr class="dropdown-divider border-secondary"></li>
-                                <li><a class="dropdown-item text-light" href="{{ url_for('main.profile') }}"><i class="bi bi-person-badge me-2 text-emerald"></i> Student Profile</a></li>
-                                <li><a class="dropdown-item text-light" href="{{ url_for('feedback.index') }}"><i class="bi bi-card-checklist me-2 text-warning"></i> Usability Survey</a></li>
-                                <li><hr class="dropdown-divider border-secondary"></li>
-                                <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Log Out</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link text-light" href="{{ url_for('auth.login') }}">Log In</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-emerald ms-lg-2" href="{{ url_for('auth.register') }}">Get Started <i class="bi bi-arrow-right ms-1"></i></a>
-                        </li>
-                    {% endif %}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-outline-glass btn-sm text-light d-flex align-items-center gap-1 py-1 px-2 me-1" data-bs-toggle="modal" data-bs-target="#apiKeyModal">
+                            <span class="badge {{ ai_mode.badge_class }}" style="font-size: 0.65rem;"><i class="bi bi-cpu-fill me-1"></i> {{ ai_mode.label }}</span>
+                            <i class="bi bi-key-fill text-warning ms-1"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('main.dashboard') }}">
+                            <i class="bi bi-speedometer2 text-emerald"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('tutor.index') }}">
+                            <i class="bi bi-robot text-emerald"></i> AI Tutor
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('roadmap.create') }}">
+                            <i class="bi bi-signpost-split text-emerald"></i> Roadmap
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('notes.index') }}">
+                            <i class="bi bi-file-earmark-text text-emerald"></i> Notes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('planner.index') }}">
+                            <i class="bi bi-calendar-check text-emerald"></i> Planner
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('assignment.index') }}">
+                            <i class="bi bi-journal-text text-emerald"></i> Assignment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('exam.index') }}">
+                            <i class="bi bi-patch-question text-emerald"></i> Exam Prep
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('resources.index') }}">
+                            <i class="bi bi-collection text-emerald"></i> Resources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light d-flex align-items-center gap-1" href="{{ url_for('feedback.index') }}">
+                            <i class="bi bi-star-fill text-warning"></i> Feedback
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown ms-lg-1">
+                        <a class="nav-link dropdown-toggle btn btn-outline-glass px-2.5 py-1 text-light d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle text-emerald"></i> {{ current_user.username if current_user.is_authenticated else 'Student' }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end glass-panel border border-secondary shadow-lg">
+                            <li>
+                                <div class="dropdown-header text-white-50">
+                                    <small>{{ current_user.email if current_user.is_authenticated else 'student@coventry.ac.uk' }}</small><br>
+                                    <span class="badge badge-emerald mt-1">Coventry University</span>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider border-secondary"></li>
+                            <li><a class="dropdown-item text-light" href="{{ url_for('main.profile') }}"><i class="bi bi-person-badge me-2 text-emerald"></i> Student Profile</a></li>
+                            <li><a class="dropdown-item text-light" href="{{ url_for('feedback.index') }}"><i class="bi bi-card-checklist me-2 text-warning"></i> Usability Survey</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
