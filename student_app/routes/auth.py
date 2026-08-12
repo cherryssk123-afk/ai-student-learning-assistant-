@@ -71,48 +71,68 @@ def login():
         return redirect(url_for('main.dashboard'))
 
     if request.method == 'POST':
-        username_or_email = request.form.get('username_or_email', '').strip()
+        identifier = request.form.get('username_or_email', '').strip()
         password = request.form.get('password', '')
         remember = True if request.form.get('remember') else False
 
-        if not username_or_email or not password:
-            flash('Please enter your username/email and password.', 'danger')
+        if not identifier or not password:
+            flash('Please enter your username or email and password.', 'danger')
             return render_template('auth/login.html')
 
         try:
             db.create_all()
-            user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email.lower())).first()
+        except Exception:
+            pass
+
+        # Case-insensitive lookup for username or email
+        user = User.query.filter(
+            (db.func.lower(User.username) == identifier.lower()) | 
+            (db.func.lower(User.email) == identifier.lower())
+        ).first()
+
+        if not user:
+            # Provision account for this student on fresh serverless pods
+            clean_username = identifier.split('@')[0] if '@' in identifier else identifier
+            clean_email = identifier.lower() if '@' in identifier else f"{identifier.lower()}@coventry.ac.uk"
+            
+            user = User.query.filter(
+                (db.func.lower(User.username) == clean_username.lower()) | 
+                (db.func.lower(User.email) == clean_email)
+            ).first()
 
             if not user:
-                # Provision account for this specific user on new serverless container pod
-                username_clean = username_or_email.split('@')[0] if '@' in username_or_email else username_or_email
-                email_clean = username_or_email if '@' in username_or_email else f"{username_clean}@coventry.ac.uk"
                 user = User(
-                    username=username_clean,
-                    email=email_clean.lower(),
+                    username=clean_username,
+                    email=clean_email,
                     university='Coventry University',
                     degree_program='Higher Education Studies'
                 )
                 user.set_password(password)
-                db.session.add(user)
-                db.session.commit()
-            elif not user.check_password(password):
-                user.set_password(password)
-                db.session.commit()
-        except Exception as e:
-            print(f"Login provisioning error: {e}")
-            db.session.rollback()
-            username_clean = username_or_email.split('@')[0] if '@' in username_or_email else username_or_email
-            email_clean = username_or_email if '@' in username_or_email else f"{username_clean}@coventry.ac.uk"
-            user = User.query.filter((User.username == username_clean) | (User.email == email_clean.lower())).first()
+                try:
+                    db.session.add(user)
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
+                    user = User.query.filter(
+                        (db.func.lower(User.username) == clean_username.lower()) | 
+                        (db.func.lower(User.email) == clean_email)
+                    ).first()
 
         if user:
+            if not user.check_password(password):
+                user.set_password(password)
+                try:
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
+
             login_user(user, remember=remember)
             session['user_id'] = user.id
             session['username'] = user.username
             session['email'] = user.email
             session['university'] = user.university
             session['degree_program'] = user.degree_program
+            
             log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
             flash(f'Welcome back, {user.username}!', 'success')
             
@@ -121,7 +141,7 @@ def login():
                 return redirect(next_page)
             return redirect(url_for('main.dashboard'))
         else:
-            flash('Login failed. Please check credentials or register.', 'danger')
+            flash('Unable to log in. Please check credentials or register.', 'danger')
             return render_template('auth/login.html')
 
     return render_template('auth/login.html')
