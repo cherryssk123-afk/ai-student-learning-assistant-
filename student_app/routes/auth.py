@@ -90,7 +90,27 @@ def login():
             (db.func.lower(User.email) == identifier.lower())
         ).first()
 
-        if not user:
+        if user:
+            # Existing user found -> verify password
+            if user.check_password(password):
+                login_user(user, remember=remember)
+                session['user_id'] = user.id
+                session['username'] = user.username
+                session['email'] = user.email
+                session['university'] = user.university
+                session['degree_program'] = user.degree_program
+                
+                log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
+                flash(f'Welcome back, {user.username}!', 'success')
+                
+                next_page = request.args.get('next')
+                if next_page and next_page.startswith('/'):
+                    return redirect(next_page)
+                return redirect(url_for('main.dashboard'))
+            else:
+                flash('Incorrect password. Please try again.', 'danger')
+                return render_template('auth/login.html')
+        else:
             # Provision account for this student on fresh serverless pods
             clean_username = identifier.split('@')[0] if '@' in identifier else identifier
             clean_email = identifier.lower() if '@' in identifier else f"{identifier.lower()}@coventry.ac.uk"
@@ -118,31 +138,20 @@ def login():
                         (db.func.lower(User.email) == clean_email)
                     ).first()
 
-        if user:
-            if not user.check_password(password):
-                user.set_password(password)
-                try:
-                    db.session.commit()
-                except Exception:
-                    db.session.rollback()
-
-            login_user(user, remember=remember)
-            session['user_id'] = user.id
-            session['username'] = user.username
-            session['email'] = user.email
-            session['university'] = user.university
-            session['degree_program'] = user.degree_program
-            
-            log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
-            flash(f'Welcome back, {user.username}!', 'success')
-            
-            next_page = request.args.get('next')
-            if next_page and next_page.startswith('/'):
-                return redirect(next_page)
-            return redirect(url_for('main.dashboard'))
-        else:
-            flash('Unable to log in. Please check credentials or register.', 'danger')
-            return render_template('auth/login.html')
+            if user and user.check_password(password):
+                login_user(user, remember=remember)
+                session['user_id'] = user.id
+                session['username'] = user.username
+                session['email'] = user.email
+                session['university'] = user.university
+                session['degree_program'] = user.degree_program
+                
+                log_activity(user.id, 'Authentication', 'Logged In', 'Successful login session started.')
+                flash(f'Welcome back, {user.username}!', 'success')
+                return redirect(url_for('main.dashboard'))
+            else:
+                flash('Invalid login credentials. Please check your username/password or register.', 'danger')
+                return render_template('auth/login.html')
 
     return render_template('auth/login.html')
 
