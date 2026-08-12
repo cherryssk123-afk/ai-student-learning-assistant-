@@ -32,8 +32,9 @@
                 <div class="mb-4">
                     <label for="level" class="form-label text-white-50 small fw-bold">Complexity Level</label>
                     <select class="form-select form-select-glass" id="level" name="level">
-                        <option value="Intermediate">Intermediate Exam Prep</option>
-                        <option value="Advanced">Advanced MSc Level</option>
+                        <option value="Beginner" {% if level == 'Beginner' %}selected{% endif %}>Beginner Fundamental Level</option>
+                        <option value="Intermediate" {% if level == 'Intermediate' or not level %}selected{% endif %}>Intermediate Exam Prep</option>
+                        <option value="Advanced" {% if level == 'Advanced' %}selected{% endif %}>Advanced MSc Level</option>
                     </select>
                 </div>
 
