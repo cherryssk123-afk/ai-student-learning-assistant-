@@ -127,8 +127,8 @@
                 {% endif %}
             {% endwith %}
 
-            {% if current_user.is_authenticated and not suppress_sidebar %}
-                <div class="row g-4">
+            <div class="row g-4">
+                {% if not suppress_sidebar %}
                     <!-- Sidebar Navigation -->
                     <div class="col-lg-3 col-xl-2">
                         <div class="glass-panel p-3 sidebar-nav sticky-lg-top" style="top: 85px;">
@@ -139,11 +139,11 @@
                                 <a class="nav-link-custom {% if request.endpoint == 'main.dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}">
                                     <i class="bi bi-grid-1x2-fill"></i> Dashboard
                                 </a>
-                                <a class="nav-link-custom {% if 'roadmap' in request.endpoint %}active{% endif %}" href="{{ url_for('roadmap.create') }}">
-                                    <i class="bi bi-signpost-split-fill"></i> Learning Pathways
-                                </a>
                                 <a class="nav-link-custom {% if 'tutor' in request.endpoint %}active{% endif %}" href="{{ url_for('tutor.index') }}">
                                     <i class="bi bi-robot"></i> AI Academic Tutor
+                                </a>
+                                <a class="nav-link-custom {% if 'roadmap' in request.endpoint %}active{% endif %}" href="{{ url_for('roadmap.create') }}">
+                                    <i class="bi bi-signpost-split-fill"></i> Learning Pathways
                                 </a>
                                 <a class="nav-link-custom {% if 'notes' in request.endpoint %}active{% endif %}" href="{{ url_for('notes.index') }}">
                                     <i class="bi bi-file-earmark-text-fill"></i> Notes Summariser
@@ -173,16 +173,13 @@
                             </nav>
                         </div>
                     </div>
-                    
-                    <!-- Main Body Area -->
-                    <div class="col-lg-9 col-xl-10">
-                        {% block content %}{% endblock %}
-                    </div>
+                {% endif %}
+                
+                <!-- Main Body Area -->
+                <div class="{% if suppress_sidebar %}col-12{% else %}col-lg-9 col-xl-10{% endif %}">
+                    {% block content %}{% endblock %}
                 </div>
-            {% else %}
-                {% block full_width_content %}{% endblock %}
-                {% block content_no_sidebar %}{% endblock %}
-            {% endif %}
+            </div>
         </div>
     </main>
 

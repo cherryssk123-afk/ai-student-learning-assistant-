@@ -27,6 +27,45 @@
     </div>
 </div>
 
+<!-- ChatGPT-Style Instant AI Prompt Bar -->
+<div class="glass-panel p-4 mb-4 border border-success text-center">
+    <h3 class="fw-bold text-white mb-2"><i class="bi bi-stars text-warning me-2"></i>Ready when you are.</h3>
+    <p class="text-muted mb-3">Ask the AI Tutor anything or pick a quick study starter topic below.</p>
+    
+    <form action="{{ url_for('tutor.ask') }}" method="POST" class="row justify-content-center mb-3">
+        <div class="col-lg-10 col-xl-9">
+            <div class="input-group input-group-lg shadow-lg">
+                <input type="text" name="question" class="form-control form-control-glass text-white fs-5 border-emerald" placeholder="Ask AI Tutor anything... (e.g. Help me prep for exam, explain Machine Learning...)" required autocomplete="off">
+                <button class="btn btn-emerald px-4 fw-bold" type="submit">
+                    <i class="bi bi-send-fill me-2"></i> Ask AI
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Quick Starter Cards -->
+    <div class="row g-2 justify-content-center">
+        <div class="col-md-4 col-lg-3">
+            <a href="{{ url_for('roadmap.create') }}" class="glass-card p-2.5 text-start d-flex align-items-center gap-2 text-decoration-none text-white border-secondary h-100">
+                <div class="rounded p-2 bg-emerald bg-opacity-20 text-emerald"><i class="bi bi-signpost-split-fill"></i></div>
+                <div class="small fw-semibold">Generate Study Pathway</div>
+            </a>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <a href="{{ url_for('notes.index') }}" class="glass-card p-2.5 text-start d-flex align-items-center gap-2 text-decoration-none text-white border-secondary h-100">
+                <div class="rounded p-2 bg-primary bg-opacity-20 text-primary"><i class="bi bi-file-earmark-text-fill"></i></div>
+                <div class="small fw-semibold">Summarise Lecture Notes</div>
+            </a>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <a href="{{ url_for('exam.index') }}" class="glass-card p-2.5 text-start d-flex align-items-center gap-2 text-decoration-none text-white border-secondary h-100">
+                <div class="rounded p-2 bg-warning bg-opacity-20 text-warning"><i class="bi bi-award-fill"></i></div>
+                <div class="small fw-semibold">Exam Preparation Kit</div>
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- KPI Study Statistics Row -->
 <div class="row g-3 mb-4">
     <div class="col-md-3">
