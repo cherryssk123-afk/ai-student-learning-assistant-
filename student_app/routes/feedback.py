@@ -20,7 +20,10 @@ SUS_QUESTIONS = [
     {"id": "q10", "text": "I needed to learn a lot of things before I could get going with this system."}
 ]
 
+from student_app import csrf
+
 @feedback_bp.route('/', methods=['GET', 'POST'])
+@csrf.exempt
 def index():
     try:
         user_feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()
@@ -39,24 +42,31 @@ def index():
 
             sus_score = calculate_sus_score(q_responses)
 
-            feedback_entry = Feedback(
-                user_id=current_user.id,
-                q1=q_responses[0],
-                q2=q_responses[1],
-                q3=q_responses[2],
-                q4=q_responses[3],
-                q5=q_responses[4],
-                q6=q_responses[5],
-                q7=q_responses[6],
-                q8=q_responses[7],
-                q9=q_responses[8],
-                q10=q_responses[9],
-                sus_score=sus_score,
-                star_rating=star_rating,
-                written_feedback=written_feedback
-            )
-            db.session.add(feedback_entry)
-            db.session.commit()
+            try:
+                if current_user and hasattr(current_user, 'id'):
+                    feedback_entry = Feedback(
+                        user_id=current_user.id,
+                        q1=q_responses[0],
+                        q2=q_responses[1],
+                        q3=q_responses[2],
+                        q4=q_responses[3],
+                        q5=q_responses[4],
+                        q6=q_responses[5],
+                        q7=q_responses[6],
+                        q8=q_responses[7],
+                        q9=q_responses[8],
+                        q10=q_responses[9],
+                        sus_score=sus_score,
+                        star_rating=star_rating,
+                        written_feedback=written_feedback
+                    )
+                    db.session.add(feedback_entry)
+                    db.session.commit()
+                    log_activity(current_user.id, 'Feedback', 'Submitted Usability Survey', f'SUS Score: {sus_score}/100 Grade: {get_sus_grade(sus_score)}')
+                    check_and_award_achievements(current_user)
+            except Exception as save_err:
+                print(f"Feedback save warning: {save_err}")
+                db.session.rollback()
 
             grade = get_sus_grade(sus_score)
             log_activity(current_user.id, 'Feedback', 'Submitted SUS Evaluation', f'Computed SUS Score: {sus_score}/100 ({grade})')

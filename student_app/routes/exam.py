@@ -3,9 +3,12 @@ from flask_login import login_required, current_user
 from student_app.utils.ai_service import ai_service
 from student_app.utils.helpers import log_activity
 
+from student_app import csrf
+
 exam_bp = Blueprint('exam', __name__)
 
 @exam_bp.route('/', methods=['GET', 'POST'])
+@csrf.exempt
 def index():
     prep_data = None
     topic = ""
@@ -19,7 +22,11 @@ def index():
             flash('Please enter your revision topic.', 'danger')
         else:
             prep_data = ai_service.generate_exam_prep(topic, level)
-            log_activity(current_user.id, 'Exam', 'Generated Exam Revision Kit', f'Created revision kit for "{topic}".')
+            try:
+                if current_user and hasattr(current_user, 'id'):
+                    log_activity(current_user.id, 'Exam', 'Generated Exam Revision Kit', f'Created revision kit for "{topic}".')
+            except Exception as e:
+                print(f"Exam logging warning: {e}")
             flash('Exam preparation kit and practice questions generated!', 'success')
 
     return render_template('exam.html', prep_data=prep_data, topic=topic, level=level)

@@ -3,9 +3,12 @@ from flask_login import login_required, current_user
 from student_app.utils.ai_service import ai_service
 from student_app.utils.helpers import log_activity
 
+from student_app import csrf
+
 assignment_bp = Blueprint('assignment', __name__)
 
 @assignment_bp.route('/', methods=['GET', 'POST'])
+@csrf.exempt
 def index():
     guidance = None
     topic = ""
@@ -19,7 +22,11 @@ def index():
             flash('Please specify an assignment topic.', 'danger')
         else:
             guidance = ai_service.generate_assignment_guidance(topic, level)
-            log_activity(current_user.id, 'Assignment', 'Generated Assignment Guidance', f'Structured framework for "{topic}".')
+            try:
+                if current_user and hasattr(current_user, 'id'):
+                    log_activity(current_user.id, 'Assignment', 'Generated Assignment Guidance', f'Structured framework for "{topic}".')
+            except Exception as e:
+                print(f"Assignment logging warning: {e}")
             flash('Assignment guidance generated in compliance with Coventry University Academic Integrity Guidelines.', 'success')
 
     return render_template('assignment.html', guidance=guidance, topic=topic, level=level)
