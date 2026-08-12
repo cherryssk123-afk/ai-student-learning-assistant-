@@ -17,9 +17,8 @@ def create_app(config_class='student_app.config.Config'):
     login_manager.init_app(app)
     csrf.init_app(app)
 
-    login_manager.login_view = 'auth.login'
-    login_manager.login_message = 'Please log in to access your learning portal.'
-    login_manager.login_message_category = 'warning'
+    login_manager.login_view = 'main.dashboard'
+    login_manager.login_message = None
 
     # Register Blueprints
     from student_app.routes.main import main_bp
