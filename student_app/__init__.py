@@ -61,4 +61,12 @@ def create_app(config_class='student_app.config.Config'):
         from flask import redirect, url_for
         return redirect(url_for('main.index'))
 
+    # Inject No-Cache headers to prevent browsers from caching old error pages
+    @app.after_request
+    def add_no_cache_headers(response):
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+
     return app
