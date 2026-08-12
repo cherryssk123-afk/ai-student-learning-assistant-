@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session, make_response
 from flask_login import login_user, logout_user, login_required, current_user
 from student_app import db
 from student_app.models import User
@@ -125,10 +125,20 @@ def login():
     return render_template('auth/login.html')
 
 @auth_bp.route('/logout')
-@login_required
 def logout():
-    log_activity(current_user.id, 'Authentication', 'Logged Out', 'User ended session.')
+    try:
+        if current_user.is_authenticated:
+            log_activity(current_user.id, 'Authentication', 'Logged Out', 'User ended session.')
+    except Exception:
+        pass
+
     logout_user()
     session.clear()
+    session.permanent = False
+    
     flash('You have been logged out successfully.', 'info')
-    return redirect(url_for('main.index'))
+    
+    resp = make_response(redirect(url_for('main.index')))
+    resp.set_cookie('session', '', expires=0, path='/')
+    resp.set_cookie('remember_token', '', expires=0, path='/')
+    return resp
