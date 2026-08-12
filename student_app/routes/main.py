@@ -10,11 +10,14 @@ main_bp = Blueprint('main', __name__)
 def inject_ai_mode():
     return dict(ai_mode=ai_service.get_active_mode())
 
+from student_app import db, csrf
+
 @main_bp.route('/')
 def index():
     return redirect(url_for('main.dashboard'))
 
 @main_bp.route('/update-username', methods=['POST'])
+@csrf.exempt
 def update_username():
     new_name = request.form.get('username', '').strip()
     if new_name:
@@ -22,15 +25,14 @@ def update_username():
         if current_user.is_authenticated:
             current_user.username = new_name
             try:
-                from student_app import db
                 db.session.commit()
             except Exception:
-                from student_app import db
                 db.session.rollback()
         flash(f'Your student profile name has been set to "{new_name}"!', 'success')
     return redirect(request.referrer or url_for('main.dashboard'))
 
 @main_bp.route('/set-api-key', methods=['POST'])
+@csrf.exempt
 def set_api_key():
     key = request.form.get('api_key', '').strip()
     if key:

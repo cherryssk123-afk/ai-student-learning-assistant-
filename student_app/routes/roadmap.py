@@ -6,9 +6,12 @@ from student_app.models import LearningRoadmap, RoadmapWeek
 from student_app.utils.ai_service import ai_service
 from student_app.utils.helpers import log_activity, check_and_award_achievements
 
+from student_app import db, csrf
+
 roadmap_bp = Blueprint('roadmap', __name__)
 
 @roadmap_bp.route('/create', methods=['GET', 'POST'])
+@csrf.exempt
 def create():
     if request.method == 'POST':
         topic = request.form.get('topic', '').strip()
@@ -75,6 +78,7 @@ def view(roadmap_id):
         return redirect(url_for('main.dashboard'))
 
 @roadmap_bp.route('/<int:roadmap_id>/toggle-week/<int:week_id>', methods=['POST'])
+@csrf.exempt
 def toggle_week(roadmap_id, week_id):
     try:
         roadmap = LearningRoadmap.query.get(roadmap_id)
@@ -109,6 +113,7 @@ def toggle_week(roadmap_id, week_id):
         return jsonify({'success': False, 'error': 'Error updating database.'}), 500
 
 @roadmap_bp.route('/<int:roadmap_id>/delete', methods=['POST'])
+@csrf.exempt
 def delete(roadmap_id):
     try:
         roadmap = LearningRoadmap.query.get(roadmap_id)

@@ -232,6 +232,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ url_for('main.update_username') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="modal-body">
                     <label for="username_modal" class="form-label text-white-50 small fw-bold">Enter Any Name You Like</label>
                     <input type="text" class="form-control form-control-glass text-white" id="username_modal" name="username" value="{{ current_user.username }}" required placeholder="e.g. Cherry, Alex, Coventry Student">
