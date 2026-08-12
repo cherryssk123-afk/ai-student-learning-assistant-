@@ -12,9 +12,23 @@ def inject_ai_mode():
 
 @main_bp.route('/')
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
-    return render_template('index.html')
+    return redirect(url_for('main.dashboard'))
+
+@main_bp.route('/update-username', methods=['POST'])
+def update_username():
+    new_name = request.form.get('username', '').strip()
+    if new_name:
+        session['username'] = new_name
+        if current_user.is_authenticated:
+            current_user.username = new_name
+            try:
+                from student_app import db
+                db.session.commit()
+            except Exception:
+                from student_app import db
+                db.session.rollback()
+        flash(f'Your student profile name has been set to "{new_name}"!', 'success')
+    return redirect(request.referrer or url_for('main.dashboard'))
 
 @main_bp.route('/set-api-key', methods=['POST'])
 def set_api_key():
