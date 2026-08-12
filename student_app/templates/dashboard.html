@@ -12,7 +12,7 @@
                 <span class="small text-emerald fw-bold">{{ current_user.university }} • {{ current_user.degree_program }}</span>
             </div>
             <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-                <h2 class="display-6 fw-bold text-white mb-0">Welcome back, {{ current_user.username }}! 👋</h2>
+                <h2 class="display-6 fw-bold text-white mb-0">Welcome back, <span class="user-display-name text-emerald">{{ session.get('username') or current_user.username }}</span>! 👋</h2>
                 <button class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 ms-2" data-bs-toggle="modal" data-bs-target="#changeNameModal">
                     <i class="bi bi-pencil-square me-1"></i> Edit Name
                 </button>
@@ -235,7 +235,7 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="modal-body">
                     <label for="username_modal" class="form-label text-white-50 small fw-bold">Enter Any Name You Like</label>
-                    <input type="text" class="form-control form-control-glass text-white" id="username_modal" name="username" value="{{ current_user.username }}" required placeholder="e.g. Cherry, Alex, Coventry Student">
+                    <input type="text" class="form-control form-control-glass text-white" id="username_modal" name="username" value="{{ session.get('username') or current_user.username }}" required placeholder="e.g. Cherry, Alex, Coventry Student" oninput="let val = this.value.trim(); if(val) document.querySelectorAll('.user-display-name').forEach(el => el.innerText = val);">
                 </div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

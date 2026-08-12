@@ -78,7 +78,7 @@
                     </li>
                     <li class="nav-item dropdown ms-lg-1">
                         <a class="nav-link dropdown-toggle btn btn-outline-glass px-2.5 py-1 text-light d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle text-emerald"></i> {{ current_user.username if current_user.is_authenticated else 'Student' }}
+                            <i class="bi bi-person-circle text-emerald"></i> <span class="user-display-name">{{ session.get('username') or (current_user.username if current_user.is_authenticated else 'Student') }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end glass-panel border border-secondary shadow-lg">
                             <li>

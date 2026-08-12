@@ -7,12 +7,12 @@
     <div class="row align-items-center">
         <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
             <div class="rounded-circle bg-emerald p-4 text-white display-4 fw-bold d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; border: 2px solid var(--emerald-accent);">
-                {{ current_user.username[0].upper() }}
+                {{ (session.get('username') or current_user.username)[0].upper() }}
             </div>
         </div>
         <div class="col-md-10">
             <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                <h2 class="fw-bold text-white mb-0">{{ current_user.username }}</h2>
+                <h2 class="fw-bold text-white mb-0"><span class="user-display-name">{{ session.get('username') or current_user.username }}</span></h2>
                 <span class="badge badge-emerald">{{ current_user.study_year }}</span>
             </div>
             <p class="text-white-50 mb-2"><i class="bi bi-envelope me-1"></i> {{ current_user.email }} • <i class="bi bi-building me-1"></i> {{ current_user.university }}</p>
