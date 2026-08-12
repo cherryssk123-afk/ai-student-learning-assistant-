@@ -17,11 +17,11 @@
                     <i class="bi bi-pencil-square me-1"></i> Edit Name
                 </button>
             </div>
-            <p class="text-muted lead mb-0">Ready to make progress on your academic learning pathways today?</p>
+            <p class="text-muted lead mb-0">Ready to elevate your academic learning & study performance today?</p>
         </div>
         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-            <a href="{{ url_for('roadmap.create') }}" class="btn btn-emerald btn-lg shadow-sm">
-                <i class="bi bi-plus-circle-fill me-2"></i> New Learning Pathway
+            <a href="{{ url_for('tutor.index') }}" class="btn btn-emerald btn-lg shadow-sm">
+                <i class="bi bi-robot me-2"></i> Ask AI Academic Tutor
             </a>
         </div>
     </div>
@@ -46,9 +46,9 @@
     <!-- Quick Starter Cards -->
     <div class="row g-2 justify-content-center">
         <div class="col-md-4 col-lg-3">
-            <a href="{{ url_for('roadmap.create') }}" class="glass-card p-2.5 text-start d-flex align-items-center gap-2 text-decoration-none text-white border-secondary h-100">
-                <div class="rounded p-2 bg-emerald bg-opacity-20 text-emerald"><i class="bi bi-signpost-split-fill"></i></div>
-                <div class="small fw-semibold">Generate Study Pathway</div>
+            <a href="{{ url_for('planner.index') }}" class="glass-card p-2.5 text-start d-flex align-items-center gap-2 text-decoration-none text-white border-secondary h-100">
+                <div class="rounded p-2 bg-emerald bg-opacity-20 text-emerald"><i class="bi bi-calendar-check-fill"></i></div>
+                <div class="small fw-semibold">Create Study Plan</div>
             </a>
         </div>
         <div class="col-md-4 col-lg-3">
@@ -71,22 +71,22 @@
     <div class="col-md-3">
         <div class="glass-card p-3 d-flex align-items-center gap-3">
             <div class="rounded-circle bg-success bg-opacity-20 p-3 text-success border border-success">
-                <i class="bi bi-signpost-split-fill fs-3"></i>
+                <i class="bi bi-calendar-check fs-3"></i>
             </div>
             <div>
-                <div class="text-muted small">Pathways Created</div>
-                <h3 class="fw-bold text-white mb-0">{{ total_roadmaps }}</h3>
+                <div class="text-muted small">Study Plans</div>
+                <h3 class="fw-bold text-white mb-0">Active</h3>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="glass-card p-3 d-flex align-items-center gap-3">
             <div class="rounded-circle bg-warning bg-opacity-20 p-3 text-warning border border-warning">
-                <i class="bi bi-trophy-fill fs-3"></i>
+                <i class="bi bi-file-earmark-text fs-3"></i>
             </div>
             <div>
-                <div class="text-muted small">Completed Roadmaps</div>
-                <h3 class="fw-bold text-white mb-0">{{ completed_roadmaps }}</h3>
+                <div class="text-muted small">Notes Engine</div>
+                <h3 class="fw-bold text-white mb-0">Ready</h3>
             </div>
         </div>
     </div>
@@ -115,52 +115,52 @@
 </div>
 
 <div class="row g-4 mb-4">
-    <!-- Active Learning Pathway Card -->
+    <!-- Active Learning Suite Card -->
     <div class="col-lg-7">
         <div class="glass-panel p-4 h-100 border border-success">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold text-white mb-0"><i class="bi bi-signpost-split text-emerald me-2"></i> Active Guided Pathway</h5>
-                {% if active_roadmap %}
-                    <span class="badge badge-emerald">{{ active_roadmap.level }}</span>
-                {% endif %}
+                <h5 class="fw-bold text-white mb-0"><i class="bi bi-stars text-emerald me-2"></i> AI Academic Suite</h5>
+                <span class="badge badge-emerald">Active Student Suite</span>
             </div>
 
-            {% if active_roadmap %}
-                <div class="glass-card p-3 mb-3 border border-secondary">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div>
-                            <h4 class="fw-bold text-white mb-1">{{ active_roadmap.topic }}</h4>
-                            <small class="text-muted"><i class="bi bi-bullseye me-1 text-warning"></i> Purpose: {{ active_roadmap.purpose }} • {{ active_roadmap.hours_per_week }} hrs/week</small>
+            <div class="row g-3 my-2">
+                <div class="col-md-6">
+                    <a href="{{ url_for('tutor.index') }}" class="glass-card p-3 text-decoration-none d-block h-100 border border-secondary">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-robot text-emerald fs-4"></i>
+                            <h6 class="fw-bold text-white mb-0">AI Academic Tutor</h6>
                         </div>
-                        <span class="badge bg-success">{{ active_roadmap.status }}</span>
-                    </div>
-
-                    <div class="my-3">
-                        <div class="d-flex justify-content-between small text-white-50 mb-1">
-                            <span>Pathway Progress</span>
-                            <span class="fw-bold text-success">{{ active_roadmap.progress_percent }}%</span>
-                        </div>
-                        <div class="progress progress-custom">
-                            <div class="progress-bar progress-bar-emerald" style="width: {{ active_roadmap.progress_percent }}%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end gap-2 mt-3">
-                        <a href="{{ url_for('roadmap.view', roadmap_id=active_roadmap.id) }}" class="btn btn-emerald btn-sm">
-                            Continue Pathway <i class="bi bi-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            {% else %}
-                <div class="text-center py-4 border border-dashed border-secondary rounded p-4">
-                    <i class="bi bi-signpost text-muted display-4 mb-2"></i>
-                    <h5 class="text-white">No active roadmap yet</h5>
-                    <p class="text-muted small">Start by defining what topic or subject you want to master.</p>
-                    <a href="{{ url_for('roadmap.create') }}" class="btn btn-emerald btn-sm mt-2">
-                        <i class="bi bi-plus-lg me-1"></i> Create First Roadmap
+                        <small class="text-muted">Ask questions, request code explanations & module concepts.</small>
                     </a>
                 </div>
-            {% endif %}
+                <div class="col-md-6">
+                    <a href="{{ url_for('notes.index') }}" class="glass-card p-3 text-decoration-none d-block h-100 border border-secondary">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-file-earmark-text text-primary fs-4"></i>
+                            <h6 class="fw-bold text-white mb-0">Notes Summariser</h6>
+                        </div>
+                        <small class="text-muted">Generate executive summaries & flashcards instantly.</small>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ url_for('planner.index') }}" class="glass-card p-3 text-decoration-none d-block h-100 border border-secondary">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-calendar-check text-warning fs-4"></i>
+                            <h6 class="fw-bold text-white mb-0">Study Planner</h6>
+                        </div>
+                        <small class="text-muted">Build structured weekly study schedules for your modules.</small>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ url_for('assignment.index') }}" class="glass-card p-3 text-decoration-none d-block h-100 border border-secondary">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-journal-text text-info fs-4"></i>
+                            <h6 class="fw-bold text-white mb-0">Assignment Guide</h6>
+                        </div>
+                        <small class="text-muted">Get structured Coventry University academic integrity frameworks.</small>
+                    </a>
+                </div>
+            </div>
 
             <!-- Quick Feature Actions Grid -->
             <div class="pt-3 border-top border-secondary mt-3">
