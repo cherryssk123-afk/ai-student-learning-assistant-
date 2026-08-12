@@ -109,7 +109,7 @@ def toggle_week(roadmap_id, week_id):
     except Exception as e:
         print(f"Toggle week fallback: {e}")
         db.session.rollback()
-        return jsonify({'success': False, 'error': 'Database updated.'}), 200
+        return jsonify({'success': False, 'error': 'Error updating database.'}), 500
 
 @roadmap_bp.route('/<int:roadmap_id>/delete', methods=['POST'])
 @login_required
