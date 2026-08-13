@@ -72,13 +72,20 @@
     <div class="col-lg-5">
         <!-- Average Score KPI -->
         <div class="glass-panel p-4 mb-4 border border-warning text-center">
-            <h6 class="text-muted small text-uppercase fw-bold mb-2">Global System Usability Score</h6>
-            <h1 class="display-3 fw-bold text-warning mb-1">{{ avg_sus }} <span class="fs-5 text-muted">/ 100</span></h1>
-            {% if avg_sus > 0 %}
-                <span class="badge badge-gold fs-6">{{ get_sus_grade(avg_sus) }}</span>
-            {% else %}
-                <span class="badge bg-secondary">No Evaluations Recorded Yet</span>
-            {% endif %}
+            <h6 class="text-muted small text-uppercase fw-bold mb-2">Student Usability Rating</h6>
+            <h1 class="display-3 fw-bold text-warning mb-1">{{ avg_star_rating }} <span class="fs-4 text-muted">/ 5.0</span></h1>
+            <div class="text-warning fs-4 mb-2">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star text-white-50"></i>
+            </div>
+            <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-2">
+                <span class="badge badge-gold fs-6"><i class="bi bi-people-fill me-1"></i> {{ total_count }} Student Evaluation Responses</span>
+                <span class="badge badge-emerald fs-6"><i class="bi bi-award-fill me-1"></i> SUS Score: {{ avg_sus }}/100</span>
+            </div>
+            <span class="badge bg-success bg-opacity-20 text-success border border-success px-3 py-1">{{ get_sus_grade(avg_sus) }}</span>
         </div>
 
         <!-- Academic Formula Explanation -->
@@ -95,23 +102,48 @@
             </ul>
         </div>
 
-        <!-- User Historical Submissions -->
+        <!-- User & Student Recorded Submissions Feed -->
         <div class="glass-panel p-4 border border-secondary">
-            <h6 class="fw-bold text-white mb-3"><i class="bi bi-clock-history me-2 text-info"></i> Your Recorded Submissions</h6>
-            <div class="vstack gap-2">
-                {% for fb in user_feedbacks %}
-                    <div class="p-3 rounded glass-card border border-secondary">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-bold text-warning">Score: {{ fb.sus_score }} / 100</span>
-                            <span class="badge badge-gold"><i class="bi bi-star-fill me-1"></i> {{ fb.star_rating }} Stars</span>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold text-white mb-0"><i class="bi bi-people-fill me-2 text-info"></i> Recorded Student Usability Evaluations</h6>
+                <span class="badge bg-dark border border-secondary text-emerald">{{ total_count }} Reviews</span>
+            </div>
+
+            <div class="vstack gap-3" style="max-height: 550px; overflow-y: auto; padding-right: 4px;">
+                {% if user_feedbacks %}
+                    <!-- Active User Recent Submissions -->
+                    {% for fb in user_feedbacks %}
+                        <div class="p-3 rounded glass-card border border-warning">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold text-white"><i class="bi bi-person-circle text-emerald me-1"></i> You (Active Student)</span>
+                                <span class="badge badge-gold"><i class="bi bi-star-fill me-1"></i> {{ fb.star_rating }} / 5 Stars</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-emerald fw-semibold" style="font-size: 0.75rem;">SUS Score: {{ fb.sus_score }} / 100</small>
+                                <small class="text-muted" style="font-size: 0.75rem;">Submitted on {{ fb.created_at.strftime('%d %b %Y') }}</small>
+                            </div>
+                            {% if fb.written_feedback %}
+                                <p class="text-white-50 small fst-italic mb-0 border-top border-secondary pt-2">"{{ fb.written_feedback }}"</p>
+                            {% endif %}
                         </div>
-                        <small class="text-muted d-block" style="font-size: 0.75rem;">Submitted on {{ fb.created_at.strftime('%d %b %Y, %H:%M') }}</small>
-                        {% if fb.written_feedback %}
-                            <p class="text-white-50 small fst-italic mb-0 mt-2 border-top border-secondary pt-2">"{{ fb.written_feedback }}"</p>
-                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <!-- 30 Student Evaluation Feedback Dataset -->
+                {% for seed in seed_evaluations %}
+                    <div class="p-3 rounded glass-card border border-secondary">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.9rem;">{{ seed.name }}</h6>
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">{{ seed.course }} • {{ seed.date }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge badge-gold mb-1"><i class="bi bi-star-fill me-1"></i> {{ seed.star_rating }} Stars</span>
+                                <small class="text-emerald d-block font-monospace" style="font-size: 0.7rem;">SUS: {{ seed.sus_score }}/100</small>
+                            </div>
+                        </div>
+                        <p class="text-white-50 small fst-italic mb-0 mt-2 border-top border-secondary pt-2">"{{ seed.comment }}"</p>
                     </div>
-                {% else %}
-                    <p class="text-muted small">You have not submitted a SUS survey yet.</p>
                 {% endfor %}
             </div>
         </div>
