@@ -61,17 +61,19 @@ def create_app(config_class='student_app.config.Config'):
             return
             
         session['email'] = 'vangah@coventry.ac.uk'
+        if not session.get('username') or session.get('username') in ['Student User', 'chandrahas', 'chandrahas v']:
+            session['username'] = 'vangah'
             
         if not current_user.is_authenticated:
             try:
                 db.create_all()
-                user_name = session.get('username', 'Student User')
+                user_name = session.get('username', 'vangah')
                 user_email = 'vangah@coventry.ac.uk'
                 
                 user = User.query.filter((User.username == user_name) | (User.email == user_email)).first()
                 if not user:
                     user = User(
-                        username=user_name,
+                        username='vangah',
                         email=user_email,
                         university='Coventry University',
                         degree_program='MSc Dissertation Studies'
@@ -80,12 +82,14 @@ def create_app(config_class='student_app.config.Config'):
                     db.session.add(user)
                     db.session.commit()
                 else:
+                    if user.username in ['Student User', 'chandrahas', 'chandrahas v']:
+                        user.username = 'vangah'
                     if user.email != 'vangah@coventry.ac.uk':
                         user.email = 'vangah@coventry.ac.uk'
-                        try:
-                            db.session.commit()
-                        except Exception:
-                            db.session.rollback()
+                    try:
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()
                 
                 login_user(user, remember=True)
                 session['user_id'] = user.id
@@ -95,12 +99,14 @@ def create_app(config_class='student_app.config.Config'):
                 print(f"Instant access middleware warning: {e}")
                 db.session.rollback()
         else:
-            if current_user and hasattr(current_user, 'email') and current_user.email != 'vangah@coventry.ac.uk':
-                try:
-                    current_user.email = 'vangah@coventry.ac.uk'
-                    db.session.commit()
-                except Exception:
-                    db.session.rollback()
+            if current_user and hasattr(current_user, 'username'):
+                if current_user.username in ['Student User', 'chandrahas', 'chandrahas v'] or not current_user.username:
+                    try:
+                        current_user.username = 'vangah'
+                        current_user.email = 'vangah@coventry.ac.uk'
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()
 
     # Global exception handler to catch any unhandled 500 errors gracefully
     @app.errorhandler(500)

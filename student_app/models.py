@@ -11,14 +11,16 @@ def load_user(user_id):
         user = User.query.get(int(user_id))
         if not user:
             from flask import session
-            user_name = session.get('username', 'Student User')
-            safe_name = user_name.replace(' ', '_').lower()
-            user_email = session.get('email', 'vangah@coventry.ac.uk')
+            user_name = session.get('username', 'vangah')
+            if user_name in ['Student User', 'chandrahas', 'chandrahas v']:
+                user_name = 'vangah'
+                session['username'] = 'vangah'
+            user_email = 'vangah@coventry.ac.uk'
             
             user = User.query.filter((User.username == user_name) | (User.email == user_email)).first()
             if not user:
                 user = User(
-                    username=user_name,
+                    username='vangah',
                     email=user_email,
                     university=session.get('university', 'Coventry University'),
                     degree_program=session.get('degree_program', 'MSc Dissertation Studies')
@@ -26,8 +28,11 @@ def load_user(user_id):
                 user.set_password('password123')
                 db.session.add(user)
                 db.session.commit()
-            elif user.email != 'vangah@coventry.ac.uk' and not session.get('email'):
-                user.email = 'vangah@coventry.ac.uk'
+            else:
+                if user.username in ['Student User', 'chandrahas', 'chandrahas v']:
+                    user.username = 'vangah'
+                if user.email != 'vangah@coventry.ac.uk':
+                    user.email = 'vangah@coventry.ac.uk'
                 try:
                     db.session.commit()
                 except Exception:
@@ -38,7 +43,7 @@ def load_user(user_id):
         db.session.rollback()
         user = User.query.first()
         if not user:
-            user = User(username='Student User', email='vangah@coventry.ac.uk')
+            user = User(username='vangah', email='vangah@coventry.ac.uk')
             user.set_password('password123')
             try:
                 db.session.add(user)
