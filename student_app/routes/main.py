@@ -47,10 +47,26 @@ def set_api_key():
 def dashboard():
     try:
         check_and_award_achievements(current_user)
+        
+        # Purge legacy authentication logs and old email references
+        try:
+            LearningHistory.query.filter(
+                (LearningHistory.details.like('%cherry%')) |
+                (LearningHistory.activity_type == 'Authentication') |
+                (LearningHistory.activity_type == 'Roadmap')
+            ).delete(synchronize_session=False)
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+
         roadmaps = current_user.roadmaps.order_by(LearningRoadmap.created_at.desc()).all()
         active_roadmap = current_user.roadmaps.filter(LearningRoadmap.status != 'Completed').order_by(LearningRoadmap.created_at.desc()).first()
         recent_study_plan = current_user.study_plans.order_by(StudyPlan.created_at.desc()).first()
-        recent_history = current_user.history.order_by(LearningHistory.timestamp.desc()).limit(6).all()
+        recent_history = current_user.history.filter(
+            ~LearningHistory.details.like('%cherry%'),
+            LearningHistory.activity_type != 'Authentication',
+            LearningHistory.activity_type != 'Roadmap'
+        ).order_by(LearningHistory.timestamp.desc()).limit(6).all()
         achievements = current_user.achievements.order_by(Achievement.unlocked_at.desc()).all()
         total_roadmaps = len(roadmaps)
         completed_roadmaps = sum(1 for r in roadmaps if r.status == 'Completed')
@@ -79,7 +95,11 @@ def profile():
     try:
         roadmaps = current_user.roadmaps.all()
         achievements = current_user.achievements.all()
-        history = current_user.history.order_by(LearningHistory.timestamp.desc()).all()
+        history = current_user.history.filter(
+            ~LearningHistory.details.like('%cherry%'),
+            LearningHistory.activity_type != 'Authentication',
+            LearningHistory.activity_type != 'Roadmap'
+        ).order_by(LearningHistory.timestamp.desc()).all()
         feedbacks = current_user.feedbacks.order_by(Feedback.created_at.desc()).all()
     except Exception as e:
         print(f"Profile query fallback: {e}")
