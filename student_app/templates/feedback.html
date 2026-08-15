@@ -32,15 +32,19 @@
                                 <span class="badge bg-dark border border-secondary text-emerald me-2">Q{{ loop.index }}</span> {{ q.text }}
                             </label>
                             
-                            <div class="d-flex justify-content-between align-items-center gap-2">
-                                <span class="small text-muted" style="font-size: 0.75rem;">Strongly Disagree</span>
-                                <div class="btn-group w-100 mx-2" role="group">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                                <span class="small text-muted d-none d-sm-block" style="font-size: 0.75rem;">Strongly Disagree</span>
+                                <div class="d-flex justify-content-between w-100 d-sm-none mb-1 px-1">
+                                    <span class="small text-muted" style="font-size: 0.75rem;">Strongly Disagree</span>
+                                    <span class="small text-muted" style="font-size: 0.75rem;">Strongly Agree</span>
+                                </div>
+                                <div class="btn-group w-100 mx-0 mx-sm-2" role="group">
                                     {% for i in range(1, 6) %}
                                         <input type="radio" class="btn-check" name="{{ q.id }}" id="{{ q.id }}_{{ i }}" value="{{ i }}" {% if i == 4 %}checked{% endif %}>
                                         <label class="btn btn-outline-glass btn-sm" for="{{ q.id }}_{{ i }}">{{ i }}</label>
                                     {% endfor %}
                                 </div>
-                                <span class="small text-muted" style="font-size: 0.75rem;">Strongly Agree</span>
+                                <span class="small text-muted d-none d-sm-block" style="font-size: 0.75rem;">Strongly Agree</span>
                             </div>
                         </div>
                     {% endfor %}
