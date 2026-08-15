@@ -65,7 +65,7 @@ def create_app(config_class='student_app.config.Config'):
                 db.create_all()
                 user_name = session.get('username', 'Student User')
                 safe_name = user_name.replace(' ', '_').lower()
-                user_email = session.get('email', f"{safe_name}@coventry.ac.uk")
+                user_email = session.get('email', 'vangah@coventry.ac.uk')
                 
                 user = User.query.filter((User.username == user_name) | (User.email == user_email)).first()
                 if not user:

@@ -13,7 +13,7 @@ def load_user(user_id):
             from flask import session
             user_name = session.get('username', 'Student User')
             safe_name = user_name.replace(' ', '_').lower()
-            user_email = session.get('email', f"{safe_name}@coventry.ac.uk")
+            user_email = session.get('email', 'vangah@coventry.ac.uk')
             
             user = User.query.filter((User.username == user_name) | (User.email == user_email)).first()
             if not user:
@@ -26,13 +26,19 @@ def load_user(user_id):
                 user.set_password('password123')
                 db.session.add(user)
                 db.session.commit()
+            elif user.email != 'vangah@coventry.ac.uk' and not session.get('email'):
+                user.email = 'vangah@coventry.ac.uk'
+                try:
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
         return user
     except Exception as e:
         print(f"load_user error: {e}")
         db.session.rollback()
         user = User.query.first()
         if not user:
-            user = User(username='Student User', email='student@coventry.ac.uk')
+            user = User(username='Student User', email='vangah@coventry.ac.uk')
             user.set_password('password123')
             try:
                 db.session.add(user)
