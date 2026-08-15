@@ -48,13 +48,9 @@ def dashboard():
     try:
         check_and_award_achievements(current_user)
         
-        # Purge legacy authentication logs and old email references
+        # Purge all legacy activity logs for clean refreshed state
         try:
-            LearningHistory.query.filter(
-                (LearningHistory.details.like('%cherry%')) |
-                (LearningHistory.activity_type == 'Authentication') |
-                (LearningHistory.activity_type == 'Roadmap')
-            ).delete(synchronize_session=False)
+            LearningHistory.query.delete()
             db.session.commit()
         except Exception:
             db.session.rollback()
@@ -62,11 +58,7 @@ def dashboard():
         roadmaps = current_user.roadmaps.order_by(LearningRoadmap.created_at.desc()).all()
         active_roadmap = current_user.roadmaps.filter(LearningRoadmap.status != 'Completed').order_by(LearningRoadmap.created_at.desc()).first()
         recent_study_plan = current_user.study_plans.order_by(StudyPlan.created_at.desc()).first()
-        recent_history = current_user.history.filter(
-            ~LearningHistory.details.like('%cherry%'),
-            LearningHistory.activity_type != 'Authentication',
-            LearningHistory.activity_type != 'Roadmap'
-        ).order_by(LearningHistory.timestamp.desc()).limit(6).all()
+        recent_history = []
         achievements = current_user.achievements.order_by(Achievement.unlocked_at.desc()).all()
         total_roadmaps = len(roadmaps)
         completed_roadmaps = sum(1 for r in roadmaps if r.status == 'Completed')
