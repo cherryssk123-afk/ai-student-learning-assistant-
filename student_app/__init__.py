@@ -60,32 +60,47 @@ def create_app(config_class='student_app.config.Config'):
         if request.endpoint and ('static' in request.endpoint or 'auth.logout' in request.endpoint):
             return
             
+        session['email'] = 'vangah@coventry.ac.uk'
+            
         if not current_user.is_authenticated:
             try:
                 db.create_all()
                 user_name = session.get('username', 'Student User')
-                safe_name = user_name.replace(' ', '_').lower()
-                user_email = session.get('email', 'vangah@coventry.ac.uk')
+                user_email = 'vangah@coventry.ac.uk'
                 
                 user = User.query.filter((User.username == user_name) | (User.email == user_email)).first()
                 if not user:
                     user = User(
                         username=user_name,
                         email=user_email,
-                        university=session.get('university', 'Coventry University'),
-                        degree_program=session.get('degree_program', 'MSc Dissertation Studies')
+                        university='Coventry University',
+                        degree_program='MSc Dissertation Studies'
                     )
                     user.set_password('password123')
                     db.session.add(user)
                     db.session.commit()
+                else:
+                    if user.email != 'vangah@coventry.ac.uk':
+                        user.email = 'vangah@coventry.ac.uk'
+                        try:
+                            db.session.commit()
+                        except Exception:
+                            db.session.rollback()
                 
                 login_user(user, remember=True)
                 session['user_id'] = user.id
                 session['username'] = user.username
-                session['email'] = user.email
+                session['email'] = 'vangah@coventry.ac.uk'
             except Exception as e:
                 print(f"Instant access middleware warning: {e}")
                 db.session.rollback()
+        else:
+            if current_user and hasattr(current_user, 'email') and current_user.email != 'vangah@coventry.ac.uk':
+                try:
+                    current_user.email = 'vangah@coventry.ac.uk'
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
 
     # Global exception handler to catch any unhandled 500 errors gracefully
     @app.errorhandler(500)
