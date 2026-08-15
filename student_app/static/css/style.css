@@ -360,3 +360,95 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--emerald-accent);
 }
+
+/* ==========================================================================
+   Mobile & Cross-Device Responsive Optimizations
+   (iOS Safari, Android Chrome, Foldables, Tablets)
+   ========================================================================== */
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* iOS Safari Backdrop Filter Prefix Support */
+.glass-panel, .glass-card, .navbar-custom, .modal-content-glass {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+/* Mobile Touch Target & Layout Adjustments */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: rgba(8, 14, 20, 0.98);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-top: 0.75rem;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+  }
+  
+  .navbar-nav .nav-link {
+    padding: 0.65rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+    background: rgba(16, 185, 129, 0.15);
+  }
+
+  .btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .display-3 {
+    font-size: calc(2rem + 1.5vw);
+  }
+  
+  .display-4, .display-5 {
+    font-size: calc(1.5rem + 1vw);
+  }
+  
+  .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .glass-panel {
+    padding: 1.25rem !important;
+  }
+
+  .sus-option {
+    padding: 0.75rem;
+    min-height: 44px;
+  }
+
+  /* Prevent code/pre horizontal scroll breakage on mobile */
+  pre, code, table {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .brand-text {
+    font-size: 1rem !important;
+  }
+  
+  .badge {
+    font-size: 0.7rem !important;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 220px);
+    min-height: 380px;
+  }
+}
